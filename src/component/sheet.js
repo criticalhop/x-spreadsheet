@@ -14,6 +14,7 @@ import SortFilter from './sort_filter';
 import { xtoast } from './message';
 import { cssPrefix } from '../config';
 import { formulas } from '../core/formula';
+import { t } from '../locale/locale';
 
 /**
  * @desc throttle fn
@@ -685,7 +686,9 @@ function sheetInitEvents() {
   };
 
   bind(window, 'resize', () => {
-    this.reload();
+    if (this.isVisible) {
+      this.reload();
+    }
   });
 
   bind(window, 'click', (evt) => {
@@ -849,6 +852,7 @@ function sheetInitEvents() {
 
 export default class Sheet {
   constructor(targetEl, data) {
+    this.isVisible = true;
     this.eventMap = new Map();
     const { view, showToolbar, showContextmenu } = data.settings;
     this.el = h('div', `${cssPrefix}-sheet`);
@@ -903,6 +907,14 @@ export default class Sheet {
     sheetReset.call(this);
     // init selector [0, 0]
     selectorSet.call(this, false, 0, 0);
+  }
+
+  hide_me() {
+    this.isVisible = false;
+  }
+
+  show_me() {
+    this.isVisible = true;
   }
 
   on(eventName, func) {

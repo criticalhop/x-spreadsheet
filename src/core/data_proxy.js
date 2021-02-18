@@ -459,8 +459,12 @@ export default class DataProxy {
   }
 
   pasteFromText(txt) {
-    const lines = txt.split('\r\n').map(it => it.replace(/"/g, '').split('\t'));
-    if (lines.length > 0) lines.length -= 1;
+    var lines;
+    if (txt.indexOf("\r") == -1) {
+      lines = txt.split('\n').map(it => it.replace(/"/g, '').split('\t'));
+    } else {
+      lines= txt.split('\r\n').map(it => it.replace(/"/g, '').split('\t'));
+    }
     const { rows, selector } = this;
     this.changeData(() => {
       rows.paste(lines, selector.range);

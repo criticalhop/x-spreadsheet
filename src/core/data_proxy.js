@@ -410,29 +410,24 @@ export default class DataProxy {
       return
     }
     var copyText = "";
+    var lines = [];
     var rowData = this.rows.getData();
     for (var ri = this.selector.range.sri; ri <= this.selector.range.eri; ri++) {
+      var line = [];
       if (rowData.hasOwnProperty(ri)) {
         for (var ci = this.selector.range.sci; ci <= this.selector.range.eci; ci++) {
-          if (ci > this.selector.range.sci) {
-            copyText += '\t'
-          }
           if (rowData[ri].cells.hasOwnProperty(ci)) {
-            var cellText = String(rowData[ri].cells[ci].text)
-            if ((cellText.indexOf("\n") == -1) && (cellText.indexOf("\t") == -1) && (cellText.indexOf("\"") == -1)) {
-              copyText += cellText;
-            } else {
-              copyText += "\"" + cellText + "\"";
-            }
+            line.push(String(rowData[ri].cells[ci].text));
           }
         }
       } else {
         for (var ci = this.selector.range.sci; ci <= this.selector.range.eci; ci++) {
-          copyText += '\t'
+          line.push("");
         }
       }
-      copyText += '\n'
+        lines.push(line);
     }
+    var copyText = global.SheetClip.stringify(lines);
     navigator.clipboard.writeText(copyText).then(function () {}, function (err) {
       console.log('text copy to the system clipboard error  ', copyText, err);
     });

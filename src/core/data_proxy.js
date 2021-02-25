@@ -13,7 +13,7 @@ import { Validations } from './validation';
 import { CellRange } from './cell_range';
 import { expr2xy, xy2expr } from './alphabet';
 import { t } from '../locale/locale';
-import { csv2array } from '../algorithm/csv2array'
+import { SheetClip } from '../algorithm/sheetclip';
 
 // private methods
 /*
@@ -461,7 +461,7 @@ export default class DataProxy {
 
   pasteFromText(txt) {
    
-    var lines = csv2array(txt, '\t');
+    var lines = global.SheetClip.parse(txt);
     const { rows, selector } = this;
     this.changeData(() => {
       rows.paste(lines, selector.range);
